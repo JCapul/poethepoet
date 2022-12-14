@@ -209,6 +209,8 @@ class PoeExecutor(metaclass=MetaPoeExecutor):
 
         # signal pass through
         def handle_signal(signum, _frame):
+            # sigint is not handled by send_signal() windows implementation
+            signum = signal.CTRL_C_EVENT if self._is_windows else signum
             proc.send_signal(signum)
 
         old_signal_handler = signal.signal(signal.SIGINT, handle_signal)
